@@ -1,6 +1,8 @@
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import type { Provider } from "next-auth/providers";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import { prisma } from "~/server/db";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -57,6 +59,7 @@ export const providerMap = providers
   .filter((provider) => provider.id !== "credentials");
 
 export const authConfig = {
+  adapter: PrismaAdapter(prisma),
   providers: providers,
   pages: {
     signIn: "/auth/signin",
@@ -66,11 +69,11 @@ export const authConfig = {
     newUser: "/auth/new-user", // New users will be directed here on first sign in (leave the property out if not of interest)
   },
   callbacks: {
-    session: ({ session, token }) => ({
+    session: ({ session, user }) => ({
       ...session,
       user: {
         ...session.user,
-        id: token.sub,
+        id: user.id,
       },
     }),
   },

@@ -1,18 +1,17 @@
-"use client";
+import { auth } from "~/server/auth";
+import Link from "next/link";
 
-// import { useRouter } from "next/router";
+export const Header = async () => {
+  const session = await auth();
 
-interface HeaderProps {
-  signedIn: boolean;
-}
-export const Header = ({ signedIn }: HeaderProps) => {
   return (
     <div className="flex gap-4 p-4">
-      <div>ScriptAsync</div>
-      <div>Read</div>
-      <div>Groups</div>
-      {signedIn && <div>Me</div>}
-      <div>Sign {signedIn ? "Out" : "In"}</div>
+      <Link href="/">ScriptAsync</Link>
+      <Link href="/read">Read</Link>
+      <Link href="/group">Groups</Link>
+      {session?.user && <Link href="/me">Me</Link>}
+      {session?.user && <Link href="/api/auth/signout">Sign Out</Link>}
+      {!session?.user && <Link href={"/api/auth/signin"}>Sign In</Link>}
     </div>
   );
 };
