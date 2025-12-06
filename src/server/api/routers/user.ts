@@ -10,7 +10,21 @@ export const userRouter = createTRPCRouter({
 
     await ctx.prisma.user.update({
       where: { id: userId },
-      data: { name: null, email: null, image: null }, // TODO: add deletedAt on users, accounts, sessions, etc.
+      data: {
+        name: null,
+        email: null,
+        image: null,
+        deleted: true,
+        deletedAt: new Date(),
+      },
+    });
+
+    await ctx.prisma.account.deleteMany({
+      where: { userId: userId },
+    });
+
+    await ctx.prisma.session.deleteMany({
+      where: { userId: userId },
     });
     return { success: true };
   }),
