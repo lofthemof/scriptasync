@@ -11,6 +11,7 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { auth } from "~/server/auth";
+import { prisma } from "../db";
 
 /**
  * 1. CONTEXT
@@ -29,6 +30,7 @@ export const createTRPCContext = async (opts: { headers: Headers }) => {
 
   return {
     session,
+    prisma,
     ...opts,
   };
 };
