@@ -1,7 +1,7 @@
 import { auth } from "~/server/auth";
 import Link from "next/link";
 
-export const Header = async () => {
+export async function Header() {
   const session = await auth();
   const uuid = session?.user.id;
 
@@ -15,4 +15,4 @@ export const Header = async () => {
       {!session?.user && <Link href={"/api/auth/signin"}>Sign In</Link>}
     </div>
   );
-};
+}

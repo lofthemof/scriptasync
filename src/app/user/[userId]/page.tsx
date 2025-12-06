@@ -1,5 +1,6 @@
 import { auth } from "~/server/auth";
 import { notFound } from "next/navigation";
+import UserClientPage from "./UserClientPage";
 
 export default async function UserPage({
   params,
@@ -19,10 +20,5 @@ export default async function UserPage({
     notFound();
   }
 
-  return (
-    <div>
-      <h1>Welcome, {email}</h1>
-      <p>Your User ID: {sessionId}</p>
-    </div>
-  );
+  return <UserClientPage email={email} sessionId={sessionId} />;
 }
