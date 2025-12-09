@@ -8,7 +8,7 @@ export async function Header() {
   return (
     <div className="flex gap-4 p-4">
       <Link href="/">ScriptAsync</Link>
-      <Link href="/read">Read</Link>
+      <Link href={`/read/${uuid}`}>Read</Link>
       <Link href="/group">Groups</Link>
       {session?.user && <Link href={`/user/${uuid}`}>Me</Link>}
       {session?.user && <Link href="/api/auth/signout">Sign Out</Link>}
