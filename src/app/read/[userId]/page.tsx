@@ -1,9 +1,23 @@
-import { MarkdownViewer } from "~/app/_components/MarkdownViewer";
+import { auth } from "~/server/auth";
+import { notFound } from "next/navigation";
+import ReadClientPage from "./ReadClientPage";
 
-export default function ReadPage() {
-  return (
-    <div>
-      <MarkdownViewer slug="01_Genesis/Chapter_01" />
-    </div>
-  );
+export default async function ReadPage({
+  params,
+}: {
+  params: { userId: string };
+}) {
+  const session = await auth();
+
+  if (!session?.user) {
+    notFound();
+  }
+
+  const sessionId = session.user.id;
+
+  if (params.userId !== sessionId) {
+    notFound();
+  }
+
+  return <ReadClientPage sessionId={sessionId} />;
 }
