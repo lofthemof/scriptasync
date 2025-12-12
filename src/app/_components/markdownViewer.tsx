@@ -29,7 +29,7 @@ export function MarkdownViewer({ content }: MarkdownViewerProps) {
         const verseText = match[2];
         elements.push(
           <span key={i}>
-            <strong>{verseNum}</strong> {verseText}
+            <strong>{verseNum}</strong> {verseText + " "}
           </span>,
         );
       }
