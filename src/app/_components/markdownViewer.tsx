@@ -1,24 +1,12 @@
 "use client";
 
-import { useEffect, useState, type ReactElement } from "react";
-import { getBibleMarkdown } from "../_utils/getBibleMarkdown";
+import { type ReactElement } from "react";
 
-export function MarkdownViewer({ slug }: { slug: string }) {
-  const [content, setContent] = useState<string>("");
-  const [loading, setLoading] = useState(true);
+interface MarkdownViewerProps {
+  content: string;
+}
 
-  useEffect(() => {
-    const loadContent = async () => {
-      setLoading(true);
-      const md = await getBibleMarkdown(slug);
-      setContent(md);
-      setLoading(false);
-    };
-    void loadContent();
-  }, [slug]);
-
-  if (loading) return <div>Loading...</div>;
-
+export function MarkdownViewer({ content }: MarkdownViewerProps) {
   const lines = content.split("\n");
   const elements: ReactElement[] = [];
   const verseRegex = /^(\d+)\.\s*(.*)/;
@@ -41,7 +29,7 @@ export function MarkdownViewer({ slug }: { slug: string }) {
         const verseText = match[2];
         elements.push(
           <span key={i}>
-            <strong>{verseNum}</strong> {verseText}{" "}
+            <strong>{verseNum}</strong> {verseText}
           </span>,
         );
       }

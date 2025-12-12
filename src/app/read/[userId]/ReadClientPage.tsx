@@ -2,15 +2,20 @@
 
 import { useState } from "react";
 import { MarkdownViewer } from "~/app/_components/MarkdownViewer";
-// import { api } from "~/trpc/react";
+import { api } from "~/trpc/react";
 
 interface UserClientPageProps {
   sessionId: string;
 }
 
 export default function ReadClientPage({ sessionId }: UserClientPageProps) {
-  const [book, setBook] = useState("");
-  const [chapter, setChapter] = useState("");
+  const [book, setBook] = useState("01_Genesis");
+  const [chapter, setChapter] = useState("Chapter_01");
+
+  const { data, isLoading, error } = api.bible.getChapter.useQuery({
+    book,
+    chapter,
+  });
 
   return (
     <div>
@@ -22,7 +27,14 @@ export default function ReadClientPage({ sessionId }: UserClientPageProps) {
         <div>Set Chapter</div>
         <input type="text"></input>
       </div>
-      <MarkdownViewer slug="01_Genesis/Chapter_01" />
+
+      {isLoading && <div>Loading...</div>}
+
+      {error && <div>{error.message}</div>}
+
+      {data?.success && data.content && (
+        <MarkdownViewer content={data.content} />
+      )}
     </div>
   );
 }
