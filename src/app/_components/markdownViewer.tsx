@@ -1,13 +1,25 @@
-import fs from "fs";
-import path from "path";
-import { type ReactElement } from "react";
+"use client";
+
+import { useEffect, useState, type ReactElement } from "react";
+import { getBibleMarkdown } from "../_utils/getBibleMarkdown";
 
 export function MarkdownViewer({ slug }: { slug: string }) {
-  const baseDir = path.join(process.cwd(), "src/content/esv_bible");
-  const fullPath = path.join(baseDir, `${slug}.md`);
-  const md = fs.readFileSync(fullPath, "utf8");
+  const [content, setContent] = useState<string>("");
+  const [loading, setLoading] = useState(true);
 
-  const lines = md.split("\n");
+  useEffect(() => {
+    const loadContent = async () => {
+      setLoading(true);
+      const md = await getBibleMarkdown(slug);
+      setContent(md);
+      setLoading(false);
+    };
+    void loadContent();
+  }, [slug]);
+
+  if (loading) return <div>Loading...</div>;
+
+  const lines = content.split("\n");
   const elements: ReactElement[] = [];
   const verseRegex = /^(\d+)\.\s*(.*)/;
 
