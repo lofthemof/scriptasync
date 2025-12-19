@@ -29,7 +29,10 @@ export function ChapterSelect({ book, value, onChange }: ChapterSelectProps) {
       <SelectTrigger className="w-[180px]">
         <SelectValue placeholder="Select a chapter" />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent
+        position="popper"
+        className="max-h-[min(70vh,24rem,var(--radix-select-content-available-height))] overflow-y-auto"
+      >
         <SelectGroup>
           <SelectLabel>Chapters</SelectLabel>
           {chapters.map((chapterNumber) => {
