@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { MarkdownViewer } from "~/app/_components/MarkdownViewer";
+import { useCallback, useState } from "react";
+import { MarkdownViewer } from "~/app/_components/markdownViewer";
 import { api } from "~/trpc/react";
 
 interface UserClientPageProps {
@@ -11,6 +11,15 @@ interface UserClientPageProps {
 export default function ReadClientPage({ sessionId }: UserClientPageProps) {
   const [book, setBook] = useState("01_Genesis");
   const [chapter, setChapter] = useState("Chapter_01");
+  const [selection, setSelection] = useState<{
+    book: string;
+    chapter: string;
+    verses: string[];
+  }>({
+    book,
+    chapter,
+    verses: [],
+  });
 
   const [bookInput, setBookInput] = useState(book);
   const [chapterInput, setChapterInput] = useState(chapter);
@@ -19,6 +28,11 @@ export default function ReadClientPage({ sessionId }: UserClientPageProps) {
     book,
     chapter,
   });
+
+  const handleVersesChange = useCallback(
+    (verses: string[]) => setSelection({ book, chapter, verses }),
+    [book, chapter],
+  );
 
   return (
     <div>
@@ -32,6 +46,7 @@ export default function ReadClientPage({ sessionId }: UserClientPageProps) {
         <button
           onClick={() => {
             setBook(bookInput);
+            setSelection({ book: bookInput, chapter, verses: [] });
           }}
         >
           Set
@@ -47,6 +62,7 @@ export default function ReadClientPage({ sessionId }: UserClientPageProps) {
         <button
           onClick={() => {
             setChapter(chapterInput);
+            setSelection({ book, chapter: chapterInput, verses: [] });
           }}
         >
           Set
@@ -58,8 +74,15 @@ export default function ReadClientPage({ sessionId }: UserClientPageProps) {
       {error && <div>{error.message}</div>}
 
       {data?.success && data.content && (
-        <MarkdownViewer content={data.content} />
+        <MarkdownViewer
+          content={data.content}
+          onSelectionChange={handleVersesChange}
+        />
       )}
+      <div>
+        <div>Selected verses</div>
+        <pre>{JSON.stringify(selection, null, 2)}</pre>
+      </div>
     </div>
   );
 }
