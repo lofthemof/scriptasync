@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { MarkdownViewer } from "~/app/_components/markdownViewer";
+import { MarkdownViewer } from "~/app/_components/MarkdownViewer";
 import { api } from "~/trpc/react";
 
 interface UserClientPageProps {
