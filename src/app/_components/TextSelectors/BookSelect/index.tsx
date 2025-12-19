@@ -1,5 +1,3 @@
-import * as React from "react";
-
 import {
   Select,
   SelectContent,
@@ -9,11 +7,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import { NEW_TESTAMENT_BOOKS, OLD_TESTAMENT_BOOKS } from "./bookData";
+import { NEW_TESTAMENT_BOOKS, OLD_TESTAMENT_BOOKS } from "../bookData";
 
-export function BookSelect() {
+interface BookSelectProps {
+  value: string;
+  onChange: (bookFile: string) => void;
+}
+
+export function BookSelect({ value, onChange }: BookSelectProps) {
   return (
-    <Select>
+    <Select value={value} onValueChange={onChange}>
       <SelectTrigger className="w-[280px]">
         <SelectValue placeholder="Select a book" />
       </SelectTrigger>

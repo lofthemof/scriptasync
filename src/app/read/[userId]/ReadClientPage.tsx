@@ -1,6 +1,8 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { BookSelect } from "~/app/_components/TextSelectors/BookSelect";
+import { ChapterSelect } from "~/app/_components/TextSelectors/ChapterSelect";
 import { MarkdownViewer } from "~/app/_components/MarkdownViewer";
 import { api } from "~/trpc/react";
 
@@ -21,13 +23,27 @@ export default function ReadClientPage({ sessionId }: UserClientPageProps) {
     verses: [],
   });
 
-  const [bookInput, setBookInput] = useState(book);
-  const [chapterInput, setChapterInput] = useState(chapter);
-
   const { data, isLoading, error } = api.bible.getChapter.useQuery({
     book,
     chapter,
   });
+
+  const handleBookChange = useCallback(
+    (newBook: string) => {
+      setBook(newBook);
+      setChapter("Chapter_01");
+      setSelection({ book: newBook, chapter, verses: [] });
+    },
+    [chapter],
+  );
+
+  const handleChapterChange = useCallback(
+    (newChapter: string) => {
+      setChapter(newChapter);
+      setSelection({ book, chapter: newChapter, verses: [] });
+    },
+    [book],
+  );
 
   const handleVersesChange = useCallback(
     (verses: string[]) => setSelection({ book, chapter, verses }),
@@ -36,37 +52,17 @@ export default function ReadClientPage({ sessionId }: UserClientPageProps) {
 
   return (
     <div>
-      <div className="flex">
+      <div className="flex items-center gap-2">
         <div>Book</div>
-        <input
-          type="text"
-          onChange={(e) => setBookInput(e.target.value)}
-          value={bookInput}
-        />
-        <button
-          onClick={() => {
-            setBook(bookInput);
-            setSelection({ book: bookInput, chapter, verses: [] });
-          }}
-        >
-          Set
-        </button>
+        <BookSelect value={book} onChange={handleBookChange} />
       </div>
-      <div className="flex">
-        <div>Set Chapter</div>
-        <input
-          type="text"
-          onChange={(e) => setChapterInput(e.target.value)}
-          value={chapterInput}
+      <div className="flex items-center gap-2">
+        <div>Chapter</div>
+        <ChapterSelect
+          book={book}
+          value={chapter}
+          onChange={handleChapterChange}
         />
-        <button
-          onClick={() => {
-            setChapter(chapterInput);
-            setSelection({ book, chapter: chapterInput, verses: [] });
-          }}
-        >
-          Set
-        </button>
       </div>
 
       {isLoading && <div>Loading...</div>}
