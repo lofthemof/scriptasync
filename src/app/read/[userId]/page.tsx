@@ -19,5 +19,5 @@ export default async function ReadPage({
     notFound();
   }
 
-  return <ReadClientPage sessionId={sessionId} />;
+  return <ReadClientPage />;
 }
