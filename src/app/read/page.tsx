@@ -2,20 +2,10 @@ import { auth } from "~/server/auth";
 import { notFound } from "next/navigation";
 import ReadClientPage from "./ReadClientPage";
 
-export default async function ReadPage({
-  params,
-}: {
-  params: { userId: string };
-}) {
+export default async function ReadPage() {
   const session = await auth();
 
   if (!session?.user) {
-    notFound();
-  }
-
-  const sessionId = session.user.id;
-
-  if (params.userId !== sessionId) {
     notFound();
   }
 
