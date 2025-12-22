@@ -92,7 +92,8 @@ model Bookmark {
   userId  String
   book    String
   chapter String
-  numbers Int[]
+  verses  Int[]
+  note    String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

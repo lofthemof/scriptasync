@@ -4,7 +4,8 @@ CREATE TABLE "bookmarks" (
     "userId" TEXT NOT NULL,
     "book" TEXT NOT NULL,
     "chapter" TEXT NOT NULL,
-    "numbers" INTEGER[],
+    "verses" INTEGER[],
+    "note" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
