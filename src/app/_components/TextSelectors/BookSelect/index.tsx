@@ -20,7 +20,10 @@ export function BookSelect({ value, onChange }: BookSelectProps) {
       <SelectTrigger className="w-[280px]">
         <SelectValue placeholder="Select a book" />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent
+        position="popper"
+        className="max-h-[min(70vh,24rem,var(--radix-select-content-available-height))] overflow-y-auto"
+      >
         <SelectGroup>
           <SelectLabel>Old Testament</SelectLabel>
           {OLD_TESTAMENT_BOOKS.map((book) => (

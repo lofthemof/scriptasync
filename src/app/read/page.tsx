@@ -9,7 +9,5 @@ export default async function ReadPage() {
     notFound();
   }
 
-  const sessionId = session.user.id;
-
-  return <ReadClientPage sessionId={sessionId} />;
+  return <ReadClientPage />;
 }
