@@ -97,7 +97,7 @@ model VerificationToken {
 ///////////////////////////////////////////////////
 model Bible {
   id       String @id @default(cuid())
-  key      String // "ESV", "KJV", "NIV"
+  key      String @unique // "ESV", "KJV", "NIV"
   name     String // "English Standard Version"
   language String // "en"
 
@@ -107,7 +107,6 @@ model Bible {
   updatedAt DateTime @updatedAt
   users     User[]
 
-  @@unique([key])
   @@map("bibles")
 }
 
