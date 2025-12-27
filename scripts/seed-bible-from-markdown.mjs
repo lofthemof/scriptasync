@@ -57,7 +57,12 @@ const parseVerses = (content) => {
     .filter(Boolean);
 };
 
-const upsertChapterWithVerses = async (book, chapterNumber, content) => {
+const upsertChapterWithVerses = async (
+  book,
+  chapterNumber,
+  chapterSlug,
+  content,
+) => {
   const verses = parseVerses(content);
 
   const chapter = await prisma.chapter.upsert({
@@ -67,8 +72,8 @@ const upsertChapterWithVerses = async (book, chapterNumber, content) => {
         number: chapterNumber,
       },
     },
-    update: { number: chapterNumber, bookId: book.id },
-    create: { number: chapterNumber, bookId: book.id },
+    update: { number: chapterNumber, bookId: book.id, slug: chapterSlug },
+    create: { number: chapterNumber, bookId: book.id, slug: chapterSlug },
   });
 
   await prisma.verse.deleteMany({ where: { chapterId: chapter.id } });
@@ -127,10 +132,16 @@ const seedBible = async () => {
       if (!match) continue;
 
       const chapterNumber = Number.parseInt(match[1] ?? "0", 10);
+      const chapterSlug = path.parse(file).name;
       const fullPath = path.join(bookDir, file);
       const content = await fs.readFile(fullPath, "utf8");
 
-      await upsertChapterWithVerses(bookRecord, chapterNumber, content);
+      await upsertChapterWithVerses(
+        bookRecord,
+        chapterNumber,
+        chapterSlug,
+        content,
+      );
       console.log(`Saved ${bookMeta.slug} chapter ${chapterNumber}`);
     }
   }

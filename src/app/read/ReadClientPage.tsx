@@ -3,20 +3,23 @@
 import { useCallback, useEffect, useState } from "react";
 import { BookSelect } from "~/app/_components/TextSelectors/BookSelect";
 import { ChapterSelect } from "~/app/_components/TextSelectors/ChapterSelect";
-import { MarkdownViewer } from "~/app/_components/MarkdownViewer";
+import { VerseSelector } from "~/app/_components/VerseSelector";
 import { api } from "~/trpc/react";
 
+const CHAP_ONE_SLUG = "Chapter_01";
+const GENESIS_SLUG = "01_Genesis";
+
 export default function ReadClientPage() {
-  const [book, setBook] = useState("01_Genesis");
-  const [chapter, setChapter] = useState("Chapter_01");
+  const [bookSlug, setBookSlug] = useState(GENESIS_SLUG);
+  const [chapterSlug, setChapterSlug] = useState(CHAP_ONE_SLUG);
   const [hasInitializedFromUser, setHasInitializedFromUser] = useState(false);
   const [selection, setSelection] = useState<{
-    book: string;
-    chapter: string;
-    verses: string[];
+    bookSlug: string;
+    chapterSlug: string;
+    verses: number[];
   }>({
-    book,
-    chapter,
+    bookSlug,
+    chapterSlug,
     verses: [],
   });
 
@@ -25,28 +28,37 @@ export default function ReadClientPage() {
   const setLastOpened = api.user.setLastOpened.useMutation();
 
   const handleBookChange = useCallback(
-    (newBook: string) => {
-      const resetChapter = "Chapter_01";
-      setBook(newBook);
-      setChapter("Chapter_01");
-      setSelection({ book: newBook, chapter: resetChapter, verses: [] });
-      setLastOpened.mutate({ newBook, newChapter: resetChapter });
+    (newBookSlug: string) => {
+      const resetChapter = CHAP_ONE_SLUG;
+      setBookSlug(newBookSlug);
+      setChapterSlug(CHAP_ONE_SLUG);
+      setSelection({
+        bookSlug: newBookSlug,
+        chapterSlug: resetChapter,
+        verses: [],
+      });
+      setLastOpened.mutate({ newBookSlug, newChapterSlug: resetChapter });
     },
     [setLastOpened],
   );
 
   const handleChapterChange = useCallback(
-    (newChapter: string) => {
-      setChapter(newChapter);
-      setSelection({ book, chapter: newChapter, verses: [] });
-      setLastOpened.mutate({ newBook: book, newChapter });
+    (newChapterSlug: string) => {
+      setChapterSlug(newChapterSlug);
+      setSelection({
+        bookSlug: bookSlug,
+        chapterSlug: newChapterSlug,
+        verses: [],
+      });
+      setLastOpened.mutate({ newBookSlug: bookSlug, newChapterSlug });
     },
-    [book, setLastOpened],
+    [bookSlug, setLastOpened],
   );
 
   const handleVersesChange = useCallback(
-    (verses: string[]) => setSelection({ book, chapter, verses }),
-    [book, chapter],
+    (verses: number[]) =>
+      setSelection({ bookSlug: bookSlug, chapterSlug: chapterSlug, verses }),
+    [bookSlug, chapterSlug],
   );
 
   useEffect(() => {
@@ -55,24 +67,24 @@ export default function ReadClientPage() {
 
     setHasInitializedFromUser(true);
 
-    const initialBook = lastOpened?.lastOpenedBook ?? "01_Genesis";
-    const initialChapter = lastOpened?.lastOpenedChapter ?? "Chapter_01";
+    const initialBook = lastOpened?.lastOpenedBook?.slug ?? GENESIS_SLUG;
+    const initialChapter = lastOpened?.lastOpenedChapter?.slug ?? CHAP_ONE_SLUG;
 
-    setBook(initialBook);
-    setChapter(initialChapter);
+    setBookSlug(initialBook);
+    setChapterSlug(initialChapter);
     setSelection({
-      book: initialBook,
-      chapter: initialChapter,
+      bookSlug: initialBook,
+      chapterSlug: initialChapter,
       verses: [],
     });
   }, [hasInitializedFromUser, lastOpened, lastOpenedIsLoading]);
 
   const {
-    data: textData,
-    isLoading: textIsLoading,
-    error: textError,
+    data: chapterData,
+    isLoading: chapterIsLoading,
+    error: chapterError,
   } = api.bible.getChapter.useQuery(
-    { book, chapter },
+    { bookSlug, chapterSlug },
     { enabled: hasInitializedFromUser },
   );
 
@@ -84,24 +96,24 @@ export default function ReadClientPage() {
     <div>
       <div className="flex items-center gap-2">
         <div>Book</div>
-        <BookSelect value={book} onChange={handleBookChange} />
+        <BookSelect value={bookSlug} onChange={handleBookChange} />
       </div>
       <div className="flex items-center gap-2">
         <div>Chapter</div>
         <ChapterSelect
-          book={book}
-          value={chapter}
+          book={bookSlug}
+          value={chapterSlug}
           onChange={handleChapterChange}
         />
       </div>
 
-      {textIsLoading && <div>Loading...</div>}
+      {chapterIsLoading && <div>Loading...</div>}
 
-      {textError && <div>{textError.message}</div>}
+      {chapterError && <div>{chapterError.message}</div>}
 
-      {textData?.success && textData.content && (
-        <MarkdownViewer
-          content={textData.content}
+      {chapterData?.verses && (
+        <VerseSelector
+          verses={chapterData.verses}
           onSelectionChange={handleVersesChange}
         />
       )}

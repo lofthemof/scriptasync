@@ -67,8 +67,12 @@ model User {
   sessions      Session[]
   notes         Note[]
 
-  lastOpenedBook    String?
-  lastOpenedChapter String?
+  lastOpenedBibleId   String?
+  lastOpenedBookId    String?
+  lastOpenedChapterId String?
+  lastOpenedBible     Bible?   @relation(fields: [lastOpenedBibleId], references: [id])
+  lastOpenedBook      Book?    @relation(fields: [lastOpenedBookId], references: [id])
+  lastOpenedChapter   Chapter? @relation(fields: [lastOpenedChapterId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -101,6 +105,7 @@ model Bible {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  users     User[]
 
   @@unique([key])
   @@map("bibles")
@@ -119,6 +124,7 @@ model Book {
   updatedAt DateTime @updatedAt
   bible     Bible    @relation(fields: [bibleId], references: [id])
   bibleId   String
+  users     User[]
 
   @@unique([bibleId, slug])
   @@unique([bibleId, order])
@@ -130,14 +136,17 @@ model Book {
 model Chapter {
   id        String   @id @default(cuid())
   bookId    String   @map("book_id")
+  slug      String
   number    Int
   verses    Verse[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  book Book @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  book  Book   @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  users User[]
 
   @@unique([bookId, number])
+  @@unique([bookId, slug])
   @@index([bookId])
   @@map("chapters")
 }

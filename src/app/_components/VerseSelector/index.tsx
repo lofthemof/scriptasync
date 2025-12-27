@@ -1,53 +1,28 @@
-"use client";
+import { useEffect, useState } from "react";
 
-import { useEffect, useMemo, useState } from "react";
+export type VerseData = { number: number; text: string };
 
-interface MarkdownViewerProps {
-  content: string;
-  onSelectionChange: (verses: string[]) => void;
+interface VerseSelectorProps {
+  verses: VerseData[];
+  onSelectionChange: (verses: number[]) => void;
 }
 
-interface Verse {
-  number: string;
-  text: string;
-  key: number;
-}
-
-export function MarkdownViewer({
-  content,
+export function VerseSelector({
+  verses,
   onSelectionChange,
-}: MarkdownViewerProps) {
-  const lines = useMemo(() => content.split("\n"), [content]);
-
-  const verses = useMemo(() => {
-    const verseRegex = /^(\d+)\.\s*(.*)/;
-    return lines.reduce((acc, rawLine, index) => {
-      const line = rawLine.trim();
-      if (!line || line.startsWith("# ")) return acc;
-      const match = verseRegex.exec(line);
-      if (match) {
-        acc.push({
-          number: match[1] ?? "",
-          text: match[2] ?? "",
-          key: index,
-        });
-      }
-      return acc;
-    }, [] as Verse[]);
-  }, [lines]);
-
-  const [selectedVerses, setSelectedVerses] = useState<string[]>([]);
+}: VerseSelectorProps) {
+  const [selectedVerses, setSelectedVerses] = useState<number[]>([]);
 
   useEffect(() => {
     onSelectionChange(selectedVerses);
   }, [onSelectionChange, selectedVerses]);
 
-  const toggleVerse = (verseNumber: string) => {
+  const toggleVerse = (verseNumber: number) => {
     setSelectedVerses((prev) => {
       if (prev.includes(verseNumber)) {
         return prev.filter((v) => v !== verseNumber);
       }
-      return [...prev, verseNumber].sort((a, b) => Number(a) - Number(b));
+      return [...prev, verseNumber].sort((a, b) => a - b);
     });
   };
 
@@ -58,7 +33,7 @@ export function MarkdownViewer({
           const isSelected = selectedVerses.includes(verse.number);
           return (
             <span
-              key={verse.key}
+              key={verse.number}
               role="button"
               tabIndex={0}
               aria-pressed={isSelected}
