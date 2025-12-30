@@ -4,12 +4,6 @@ import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
 const DEFAULT_BIBLE_KEY = "ESV";
 
-interface NoteVerseEntry {
-  noteId: string;
-  verseId: string;
-  order: number;
-}
-
 export const userRouter = createTRPCRouter({
   delete: protectedProcedure.mutation(async ({ ctx }) => {
     const userId = ctx.session.user.id;
@@ -183,21 +177,17 @@ export const userRouter = createTRPCRouter({
         verses.map((verse) => [verse.number, verse.id]),
       );
 
-      const noteVerseDatas = input.verses.reduce<NoteVerseEntry[]>(
-        (acc, verseNumber, index) => {
-          const verseId = verseIdByNumber.get(verseNumber);
-          if (!verseId) {
-            throw new TRPCError({
-              code: "NOT_FOUND",
-              message: `Verse ${verseNumber} not found`,
-            });
-          }
+      const noteVerseDatas = input.verses.map((verseNumber, index) => {
+        const verseId = verseIdByNumber.get(verseNumber);
+        if (!verseId) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: `Verse ${verseNumber} not found`,
+          });
+        }
 
-          acc.push({ noteId: note.id, verseId, order: index + 1 });
-          return acc;
-        },
-        [],
-      );
+        return { noteId: note.id, verseId, order: index };
+      });
 
       await ctx.prisma.noteVerse.createMany({ data: noteVerseDatas });
 
