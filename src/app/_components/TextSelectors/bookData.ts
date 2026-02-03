@@ -75,6 +75,51 @@ export const NEW_TESTAMENT_BOOKS: BookEntry[] = [
   { file: "66_Revelation_of_John", name: "Revelation" },
 ];
 
+export function getBookName(bookSlug: string): string {
+  return bookSlug.split("_").slice(1).join(" ");
+}
+
+export function getChapterNumber(chapterSlug: string): number {
+  return parseInt(chapterSlug.split("_")[1] ?? "1", 10);
+}
+
+export function formatVerseRange(verses: number[]): string {
+  if (verses.length === 0) return "";
+  const sorted = [...verses].sort((a, b) => a - b);
+
+  const ranges: string[] = [];
+  let start = sorted[0]!;
+  let end = sorted[0]!;
+
+  for (let i = 1; i < sorted.length; i++) {
+    if (sorted[i] === end + 1) {
+      end = sorted[i]!;
+    } else {
+      ranges.push(start === end ? `${start}` : `${start}-${end}`);
+      start = sorted[i]!;
+      end = sorted[i]!;
+    }
+  }
+  ranges.push(start === end ? `${start}` : `${start}-${end}`);
+
+  return ranges.join(", ");
+}
+
+export function formatPassageReference(
+  bookSlug: string,
+  chapterSlug: string,
+  verses: number[],
+): string {
+  const bookName = getBookName(bookSlug);
+  const chapterNum = getChapterNumber(chapterSlug);
+
+  if (verses.length === 0) {
+    return `${bookName} ${chapterNum}`;
+  }
+
+  return `${bookName} ${chapterNum}:${formatVerseRange(verses)}`;
+}
+
 export const BOOK_CHAPTER_COUNTS: Record<string, number> = {
   "01_Genesis": 50,
   "02_Exodus": 40,
