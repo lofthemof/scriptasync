@@ -113,6 +113,31 @@ export const userRouter = createTRPCRouter({
 
       return { success: true };
     }),
+  getNotes: protectedProcedure.query(async ({ ctx }) => {
+    const userId = ctx.session.user.id;
+
+    const notes = await ctx.prisma.note.findMany({
+      where: { userId },
+      orderBy: { createdAt: "desc" },
+      include: {
+        verses: {
+          orderBy: { order: "asc" },
+          include: {
+            verse: {
+              select: {
+                number: true,
+                text: true,
+                chapter: { select: { slug: true } },
+                book: { select: { slug: true } },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return notes;
+  }),
   saveNote: protectedProcedure
     .input(
       z.object({

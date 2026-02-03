@@ -50,8 +50,8 @@ export function VerseSelector({
                   : "border border-transparent hover:bg-gray-100"
               }`}
             >
-              <strong className="shrink-0">{verse.number}</strong>
-              <span className="ml-1">{verse.text} </span>
+              <sup className="mr-1 font-bold">{verse.number}</sup>
+              <span className="mr-1">{verse.text}</span>
             </span>
           );
         })}
