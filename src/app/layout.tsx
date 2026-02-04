@@ -5,6 +5,7 @@ import { Geist } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import { Header } from "./_components/Header";
+import { ToastProvider } from "./_components/ToastProvider";
 
 export const metadata: Metadata = {
   title: "ScriptAsync",
@@ -26,6 +27,7 @@ export default function RootLayout({
         <TRPCReactProvider>
           <Header />
           <main>{children}</main>
+          <ToastProvider />
         </TRPCReactProvider>
       </body>
     </html>

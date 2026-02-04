@@ -188,6 +188,7 @@ model NoteVerse {
   id      String @id @default(cuid())
   noteId  String
   verseId String
+  order   Int
 
   note  Note  @relation(fields: [noteId], references: [id], onDelete: Cascade)
   verse Verse @relation(fields: [verseId], references: [id], onDelete: Cascade)

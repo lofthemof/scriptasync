@@ -1,7 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { SaveNoteDialog } from "~/app/_components/SaveNote";
 import { BookSelect } from "~/app/_components/TextSelectors/BookSelect";
+import { formatPassageReference } from "~/app/_components/TextSelectors/bookData";
 import { ChapterSelect } from "~/app/_components/TextSelectors/ChapterSelect";
 import { VerseSelector } from "~/app/_components/VerseSelector";
 import { api } from "~/trpc/react";
@@ -117,9 +119,17 @@ export default function ReadClientPage() {
           onSelectionChange={handleVersesChange}
         />
       )}
-      <div>
-        <div>Selected verses</div>
-        <pre>{JSON.stringify(selection, null, 2)}</pre>
+      <div className="mt-4 flex items-center gap-4">
+        <SaveNoteDialog
+          bookSlug={selection.bookSlug}
+          chapterSlug={selection.chapterSlug}
+          verses={selection.verses}
+        />
+        <span className="text-sm text-gray-500">
+          {selection.verses.length > 0
+            ? formatPassageReference(selection.bookSlug, selection.chapterSlug, selection.verses)
+            : "Select verses to save a note"}
+        </span>
       </div>
     </div>
   );
