@@ -30,7 +30,7 @@ Web application for reading and annotating Bible passages. Users can browse scri
 ### Installation
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/lofthemof/scriptasync.git
 cd scriptasync
 pnpm install
 ```
