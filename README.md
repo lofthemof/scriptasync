@@ -1,29 +1,114 @@
-# Create T3 App
+# ScriptAsync
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+Web application for reading and annotating Bible passages. Users can browse scripture, select verses, and save personal notes.
 
-## What's next? How do I make an app with this?
+## Features
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+- **Bible Reading** - Browse books and chapters with verse-by-verse display
+- **Verse Selection** - Select multiple verses with visual highlighting
+- **Note Taking** - Save personal notes attached to specific verses
+- **Reading Progress** - Automatically remembers your last reading location
+- **User Dashboard** - View all saved notes with scripture references
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## Tech Stack
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+- **Framework**: Next.js 15 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS 4
+- **Database**: PostgreSQL with Prisma ORM
+- **API**: tRPC for type-safe endpoints
+- **Auth**: NextAuth.js with Google OAuth
+- **UI Components**: Radix UI, React Toastify
 
-## Learn More
+### Prerequisites
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+- Node.js 18+
+- pnpm
+- PostgreSQL database
+- Google OAuth credentials
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+### Installation
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+```bash
+git clone <repo-url>
+cd scriptasync
+pnpm install
+```
 
-## How do I deploy this?
+### Environment Setup
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+Copy `.env.example` to `.env` and configure:
+
+```env
+# Database
+DATABASE_URL="postgresql://user:password@localhost:5432/scriptasync"
+
+# Auth (generate with: npx auth secret)
+AUTH_SECRET="your-auth-secret"
+
+# Google OAuth (from Google Cloud Console)
+GOOGLE_CLIENT_ID="your-client-id"
+GOOGLE_CLIENT_SECRET="your-client-secret"
+```
+
+### Database Setup
+
+```bash
+# Run migrations
+pnpm prisma migrate dev
+
+# Seed Bible data
+node scripts/seed-esv-bible-from-markdown.mjs
+```
+
+### Development
+
+```bash
+pnpm dev
+```
+
+Open [http://localhost:3000](http://localhost:3000)
+
+### Production
+
+```bash
+pnpm build
+pnpm start
+```
+
+## Scripts
+
+| Command             | Description                   |
+| ------------------- | ----------------------------- |
+| `pnpm dev`          | Start development server      |
+| `pnpm build`        | Build for production          |
+| `pnpm start`        | Start production server       |
+| `pnpm check`        | Run linting and type checking |
+| `pnpm lint:fix`     | Auto-fix linting issues       |
+| `pnpm format:write` | Format code with Prettier     |
+
+## Project Structure
+
+```
+src/
+├── app/                    # Next.js App Router pages
+│   ├── read/              # Bible reading interface
+│   ├── user/              # User dashboard
+│   └── _components/       # Shared components
+├── server/
+│   ├── api/routers/       # tRPC routers (bible, user)
+│   ├── auth/              # NextAuth configuration
+│   └── db.ts              # Prisma client
+├── trpc/                  # tRPC client setup
+└── components/ui/         # UI components
+```
+
+## Database Schema
+
+- **Bible** - Bible versions (ESV, KJV, etc.)
+- **Book** - Books within a Bible (Genesis, Exodus, etc.)
+- **Chapter** - Chapters within books
+- **Verse** - Individual verses with text content
+- **Note** - User-created notes
+- **NoteVerse** - Links notes to specific verses
+- **User** - User accounts with reading progress tracking
