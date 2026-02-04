@@ -1,6 +1,6 @@
 # ScriptAsync
 
-Web application for reading and annotating Bible passages. Users can browse scripture, select verses, and save personal notes.
+Web application for reading and annotating Bible passages. Users can browse scripture, select verses, and save personal notes. (I am aware that everything looks chopped right now, big ui revamp to come)
 
 ## Features
 
