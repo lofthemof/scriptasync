@@ -12,13 +12,12 @@ Web application for reading and annotating Bible passages. Users can browse scri
 
 ## Tech Stack
 
-- **Framework**: Next.js 15 (App Router)
+- **Framework**: React 19, Next.js 15 (App Router)
 - **Language**: TypeScript
-- **Styling**: Tailwind CSS 4
 - **Database**: PostgreSQL with Prisma ORM
 - **API**: tRPC for type-safe endpoints
-- **Auth**: NextAuth.js with Google OAuth
-- **UI Components**: Radix UI, React Toastify
+- **Auth**: Auth.js with Google OAuth
+- **Styling**: Tailwind CSS 4
 
 ### Prerequisites
 
