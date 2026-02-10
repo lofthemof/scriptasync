@@ -95,23 +95,53 @@ export default function ReadClientPage() {
   }
 
   return (
-    <div>
-      <div className="flex items-center gap-2">
-        <div>Book</div>
-        <BookSelect value={bookSlug} onChange={handleBookChange} />
-      </div>
-      <div className="flex items-center gap-2">
-        <div>Chapter</div>
-        <ChapterSelect
-          book={bookSlug}
-          value={chapterSlug}
-          onChange={handleChapterChange}
-        />
+    <div className="-mt-7 flex flex-col gap-4">
+      <div className="border-border bg-background/90 sticky top-0 z-10 -mx-6 border-b px-6 py-4 backdrop-blur">
+        <div className="flex flex-wrap items-center gap-6">
+          <div className="flex items-center gap-3">
+            <span className="text-muted-foreground text-xs tracking-[0.2em] uppercase">
+              Book
+            </span>
+            <BookSelect value={bookSlug} onChange={handleBookChange} />
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="text-muted-foreground text-xs tracking-[0.2em] uppercase">
+              Chapter
+            </span>
+            <ChapterSelect
+              book={bookSlug}
+              value={chapterSlug}
+              onChange={handleChapterChange}
+            />
+          </div>
+          <div className="flex flex-wrap items-center gap-4">
+            <SaveNoteDialog
+              bookSlug={selection.bookSlug}
+              chapterSlug={selection.chapterSlug}
+              verses={selection.verses}
+            />
+            <span className="text-muted-foreground text-sm">
+              {selection.verses.length > 0
+                ? formatPassageReference(
+                    selection.bookSlug,
+                    selection.chapterSlug,
+                    selection.verses,
+                  )
+                : "Select verses to save a note"}
+            </span>
+          </div>
+        </div>
       </div>
 
-      {chapterIsLoading && <div>Loading...</div>}
+      {chapterIsLoading && (
+        <div className="text-muted-foreground text-sm">Loading...</div>
+      )}
 
-      {chapterError && <div>{chapterError.message}</div>}
+      {chapterError && (
+        <div className="text-muted-foreground text-sm">
+          {chapterError.message}
+        </div>
+      )}
 
       {chapterData?.verses && (
         <VerseSelector
@@ -119,18 +149,6 @@ export default function ReadClientPage() {
           onSelectionChange={handleVersesChange}
         />
       )}
-      <div className="mt-4 flex items-center gap-4">
-        <SaveNoteDialog
-          bookSlug={selection.bookSlug}
-          chapterSlug={selection.chapterSlug}
-          verses={selection.verses}
-        />
-        <span className="text-sm text-gray-500">
-          {selection.verses.length > 0
-            ? formatPassageReference(selection.bookSlug, selection.chapterSlug, selection.verses)
-            : "Select verses to save a note"}
-        </span>
-      </div>
     </div>
   );
 }

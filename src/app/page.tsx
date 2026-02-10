@@ -1,22 +1,17 @@
-import { auth } from "~/server/auth";
-import { api, HydrateClient } from "~/trpc/server";
+import Link from "next/link";
+import { HydrateClient } from "~/trpc/server";
 
 export default async function Home() {
-  const session = await auth();
-
-  // if (session?.user) {
-  //   void api.post.getLatest.prefetch();
-  // }
-
   return (
     <HydrateClient>
-      <main>
-        {session?.user ? (
-          <p>Currently logged in as {session.user.name}</p>
-        ) : (
-          <p>Not logged in</p>
-        )}
-      </main>
+      <div className="flex min-h-[60vh] items-center justify-center text-center">
+        <Link
+          href="/read"
+          className="text-4xl font-semibold tracking-tight underline-offset-8 hover:underline sm:text-5xl"
+        >
+          Read Your Bible.
+        </Link>
+      </div>
     </HydrateClient>
   );
 }

@@ -1,13 +1,13 @@
 import { auth } from "~/server/auth";
 import { redirect } from "next/navigation";
-import ReadClientPage from "./ReadClientPage";
+import NotesClientPage from "./NotesClientPage";
 
-export default async function ReadPage() {
+export default async function NotesPage() {
   const session = await auth();
 
   if (!session?.user) {
     redirect("/api/auth/signin");
   }
 
-  return <ReadClientPage />;
+  return <NotesClientPage />;
 }
