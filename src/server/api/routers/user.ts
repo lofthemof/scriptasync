@@ -53,6 +53,24 @@ export const userRouter = createTRPCRouter({
       lastOpenedChapter: user.lastOpenedChapter,
     };
   }),
+  getStats: protectedProcedure.query(async ({ ctx }) => {
+    const userId = ctx.session.user.id;
+
+    const [user, notesCount] = await Promise.all([
+      ctx.prisma.user.findUnique({
+        where: { id: userId },
+        select: { createdAt: true },
+      }),
+      ctx.prisma.note.count({ where: { userId } }),
+    ]);
+
+    if (!user) throw new TRPCError({ code: "NOT_FOUND" });
+
+    return {
+      createdAt: user.createdAt,
+      notesCount,
+    };
+  }),
   setLastOpened: protectedProcedure
     .input(
       z.object({

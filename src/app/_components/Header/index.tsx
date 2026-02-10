@@ -19,6 +19,12 @@ export async function Header() {
           >
             Read
           </Link>
+          <Link
+            href="/notes"
+            className="text-muted-foreground hover:text-foreground"
+          >
+            Notes
+          </Link>
         </div>
         <div className="flex items-center gap-4 text-sm">
           {user ? (
