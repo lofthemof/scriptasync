@@ -10,7 +10,13 @@ export default async function SignInPage(props: {
 }) {
   const searchParams = await props.searchParams;
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex min-h-[60vh] flex-col items-start justify-center gap-4">
+      <div className="flex flex-col gap-1">
+        <h1 className="text-2xl font-semibold">Sign in</h1>
+        <p className="text-sm text-muted-foreground">
+          Choose a provider to continue.
+        </p>
+      </div>
       {/* <form
         action={async (formData) => {
           "use server";
@@ -59,7 +65,10 @@ export default async function SignInPage(props: {
             }
           }}
         >
-          <button type="submit">
+          <button
+            type="submit"
+            className="border-border bg-foreground text-background hover:bg-foreground/90 rounded-md border px-4 py-2 text-sm"
+          >
             <span>Sign in with {provider.name}</span>
           </button>
         </form>

@@ -4,12 +4,12 @@ import { NoteBox } from "~/app/_components/NoteBox";
 import { api } from "~/trpc/react";
 
 interface UserClientPageProps {
-  email: string | undefined | null;
+  name: string | undefined | null;
   sessionId: string;
 }
 
 export default function UserClientPage({
-  email,
+  name,
   sessionId,
 }: UserClientPageProps) {
   const deleteUser = api.user.delete.useMutation();
@@ -23,17 +23,28 @@ export default function UserClientPage({
   };
 
   return (
-    <div>
-      <h1>Welcome, {email}</h1>
-      <p>Your User ID: {sessionId}</p>
-      <button onClick={handleDelete} disabled={deleteUser.isPending}>
-        Delete account
-      </button>
-
-      <div className="mt-8">
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="flex flex-col gap-1">
+          <h1 className="text-2xl font-semibold">Hi, {name ?? "there"}</h1>
+          <p className="text-muted-foreground text-sm">User ID: {sessionId}</p>
+        </div>
+        <button
+          onClick={handleDelete}
+          disabled={deleteUser.isPending}
+          className="cursor-pointer rounded-md border border-red-600 bg-red-600 px-4 py-2 text-sm text-white hover:bg-red-700 hover:shadow-sm disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          Delete account
+        </button>
+      </div>
+      <div>
         <h2 className="mb-4 text-xl font-semibold">Your Notes</h2>
-        {notesLoading && <p>Loading notes...</p>}
-        {notes?.length === 0 && <p className="text-gray-500">No notes yet.</p>}
+        {notesLoading && (
+          <p className="text-muted-foreground text-sm">Loading notes...</p>
+        )}
+        {notes?.length === 0 && (
+          <p className="text-muted-foreground text-sm">No notes yet.</p>
+        )}
         <div className="flex flex-col gap-4">
           {notes?.map((note) => (
             <NoteBox

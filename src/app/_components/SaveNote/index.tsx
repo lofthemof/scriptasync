@@ -54,7 +54,7 @@ export function SaveNoteDialog({
       <DialogTrigger asChild>
         <button
           disabled={isDisabled}
-          className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+          className="border-border bg-foreground text-background hover:bg-foreground/90 cursor-pointer rounded-md border px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50"
         >
           Save Note
         </button>
@@ -64,7 +64,8 @@ export function SaveNoteDialog({
           <DialogHeader>
             <DialogTitle>Save a Note</DialogTitle>
             <DialogDescription>
-              Add a note for {formatPassageReference(bookSlug, chapterSlug, verses)}
+              Add a note for{" "}
+              {formatPassageReference(bookSlug, chapterSlug, verses)}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-3 py-4">
@@ -73,7 +74,7 @@ export function SaveNoteDialog({
               value={content}
               onChange={(e) => setContent(e.target.value)}
               placeholder="Enter your note..."
-              className="min-h-[100px] w-full rounded border border-gray-300 p-2"
+              className="border-border min-h-[120px] w-full rounded-md border p-2"
               required
             />
           </div>
@@ -81,7 +82,7 @@ export function SaveNoteDialog({
             <DialogClose asChild>
               <button
                 type="button"
-                className="rounded border border-gray-300 px-4 py-2 hover:bg-gray-100"
+                className="border-border hover:bg-muted rounded-md border px-4 py-2"
               >
                 Cancel
               </button>
@@ -89,7 +90,7 @@ export function SaveNoteDialog({
             <button
               type="submit"
               disabled={saveNote.isPending}
-              className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-50"
+              className="border-border bg-foreground text-background hover:bg-foreground/90 rounded-md border px-4 py-2 disabled:opacity-50"
             >
               {saveNote.isPending ? "Saving..." : "Save"}
             </button>

@@ -26,7 +26,9 @@ export default function RootLayout({
       <body>
         <TRPCReactProvider>
           <Header />
-          <main>{children}</main>
+          <main className="mx-auto w-full max-w-5xl px-6 py-8">
+            {children}
+          </main>
           <ToastProvider />
         </TRPCReactProvider>
       </body>

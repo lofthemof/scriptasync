@@ -10,7 +10,7 @@ export default async function UserPage() {
   }
 
   const sessionId = session.user.id;
-  const email = session.user.email;
+  const name = session.user.name;
 
-  return <UserClientPage email={email} sessionId={sessionId} />;
+  return <UserClientPage name={name} sessionId={sessionId} />;
 }
