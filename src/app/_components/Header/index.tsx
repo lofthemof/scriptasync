@@ -13,10 +13,16 @@ export async function Header() {
           <Link href="/" className="text-lg font-semibold tracking-tight">
             ScriptAsync
           </Link>
-          <Link href="/read" className="text-muted-foreground hover:text-foreground">
+          <Link
+            href="/read"
+            className="text-muted-foreground hover:text-foreground"
+          >
             Read
           </Link>
-          <Link href="/notes" className="text-muted-foreground hover:text-foreground">
+          <Link
+            href="/notes"
+            className="text-muted-foreground hover:text-foreground"
+          >
             Notes
           </Link>
         </div>

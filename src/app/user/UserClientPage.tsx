@@ -4,6 +4,7 @@ import Link from "next/link";
 import { formatPassageReference } from "~/app/_components/TextSelectors/bookData";
 import { api } from "~/trpc/react";
 import { cn } from "~/lib/utils";
+import { useRouter } from "next/navigation";
 
 interface UserClientPageProps {
   name: string | undefined | null;
@@ -47,7 +48,13 @@ export default function UserClientPage({
   lastOpenedBook,
   lastOpenedChapter,
 }: UserClientPageProps) {
-  const deleteUser = api.user.delete.useMutation();
+  const router = useRouter();
+  const deleteUser = api.user.delete.useMutation({
+    onSuccess: () => {
+      router.push("/");
+      router.refresh();
+    },
+  });
 
   const handleDelete = () => {
     const confirmed = window.confirm("Are you sure?");
@@ -84,7 +91,11 @@ export default function UserClientPage({
           value={new Date(createdAt).toLocaleDateString()}
         />
         <Link href="/notes" className="block">
-          <StatCard label="Notes Made" value={notesCount} className="hover:bg-muted transition-colors" />
+          <StatCard
+            label="Notes Made"
+            value={notesCount}
+            className="hover:bg-muted transition-colors"
+          />
         </Link>
         <StatCard
           label="Last Opened"
