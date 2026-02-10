@@ -6,9 +6,9 @@ Web application for reading and annotating Bible passages. Users can browse scri
 
 - **Bible Reading** - Browse books and chapters with verse-by-verse display
 - **Verse Selection** - Select multiple verses with visual highlighting
-- **Note Taking** - Save personal notes attached to specific verses
+- **Note Taking** - Save and view personal notes attached to specific verses
 - **Reading Progress** - Automatically remembers your last reading location
-- **User Dashboard** - View all saved notes with scripture references
+- **User Dashboard** - View user info + statistics
 
 ## Tech Stack
 
@@ -92,6 +92,7 @@ pnpm start
 src/
 ├── app/                    # Next.js App Router pages
 │   ├── read/              # Bible reading interface
+│   ├── notes/             # User's saved notes
 │   ├── user/              # User dashboard
 │   └── _components/       # Shared components
 ├── server/
