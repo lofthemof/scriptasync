@@ -1,5 +1,5 @@
 import { auth } from "~/server/auth";
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 import { api } from "~/trpc/server";
 import UserClientPage from "./UserClientPage";
 
@@ -7,7 +7,7 @@ export default async function UserPage() {
   const session = await auth();
 
   if (!session?.user) {
-    notFound();
+    redirect("/api/auth/signin");
   }
 
   const sessionId = session.user.id;

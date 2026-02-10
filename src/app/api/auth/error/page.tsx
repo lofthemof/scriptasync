@@ -9,9 +9,8 @@ enum Error {
 const errorMap = {
   [Error.Configuration]: (
     <p>
-      There was a problem when trying to authenticate. Please contact us if this
-      error persists. Unique error code:{" "}
-      <code className="rounded-sm bg-muted p-1 text-xs">Configuration</code>
+      There was a problem when trying to authenticate. Unique error code:{" "}
+      <code className="bg-muted rounded-sm p-1 text-xs">Configuration</code>
     </p>
   ),
 };
@@ -24,13 +23,13 @@ export default function AuthErrorPage() {
     <div className="flex h-screen w-full flex-col items-center justify-center">
       <a
         href="#"
-        className="block max-w-sm rounded-lg border border-border bg-background p-6 text-center hover:bg-muted"
+        className="border-border bg-background hover:bg-muted block max-w-sm rounded-lg border p-6 text-center"
       >
-        <h5 className="mb-2 flex flex-row items-center justify-center gap-2 text-xl font-semibold tracking-tight text-foreground">
+        <h5 className="text-foreground mb-2 flex flex-row items-center justify-center gap-2 text-xl font-semibold tracking-tight">
           Something went wrong
         </h5>
-        <div className="font-normal text-muted-foreground">
-          {errorMap[error] || "Please contact us if this error persists."}
+        <div className="text-muted-foreground font-normal">
+          {errorMap[error]}
         </div>
       </a>
     </div>

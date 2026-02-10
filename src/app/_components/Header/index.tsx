@@ -10,19 +10,13 @@ export async function Header() {
     <header className="border-border bg-background/80 border-b backdrop-blur">
       <div className="mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-5">
         <div className="flex items-center gap-6 text-sm">
-          <Link href="/" className="font-mono text-lg font-semibold tracking-tight">
+          <Link href="/" className="text-lg font-semibold tracking-tight">
             ScriptAsync
           </Link>
-          <Link
-            href="/read"
-            className="text-muted-foreground hover:text-foreground"
-          >
+          <Link href="/read" className="text-muted-foreground hover:text-foreground">
             Read
           </Link>
-          <Link
-            href="/notes"
-            className="text-muted-foreground hover:text-foreground"
-          >
+          <Link href="/notes" className="text-muted-foreground hover:text-foreground">
             Notes
           </Link>
         </div>

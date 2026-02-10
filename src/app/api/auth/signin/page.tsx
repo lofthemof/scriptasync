@@ -2,20 +2,19 @@ import { redirect } from "next/navigation";
 import { signIn } from "~/server/auth";
 import { providerMap } from "~/server/auth/config";
 import { AuthError } from "next-auth";
+import { auth } from "~/server/auth";
 
 const SIGNIN_ERROR_URL = "/error";
 
-export default async function SignInPage(props: {
-  searchParams: Promise<{ callbackUrl: string | undefined }>;
-}) {
-  const searchParams = await props.searchParams;
+export default async function SignInPage() {
+  const session = await auth();
+  if (session?.user) {
+    redirect("/");
+  }
   return (
-    <div className="flex min-h-[60vh] flex-col items-start justify-center gap-4">
+    <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4 text-center">
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-semibold">Sign in</h1>
-        <p className="text-sm text-muted-foreground">
-          Choose a provider to continue.
-        </p>
       </div>
       {/* <form
         action={async (formData) => {
@@ -46,9 +45,7 @@ export default async function SignInPage(props: {
           action={async () => {
             "use server";
             try {
-              await signIn(provider.id, {
-                redirectTo: searchParams?.callbackUrl ?? "",
-              });
+              await signIn(provider.id, { redirectTo: "/" });
             } catch (error) {
               // Signin can fail for a number of reasons, such as the user
               // not existing, or the user not having the correct role.
@@ -67,9 +64,9 @@ export default async function SignInPage(props: {
         >
           <button
             type="submit"
-            className="border-border bg-foreground text-background hover:bg-foreground/90 rounded-md border px-4 py-2 text-sm"
+            className="border-border bg-foreground text-background hover:bg-foreground/90 cursor-pointer rounded-md border px-4 py-2 text-sm"
           >
-            <span>Sign in with {provider.name}</span>
+            <span>Sign in with {provider.name} OAuth</span>
           </button>
         </form>
       ))}
