@@ -5,6 +5,7 @@ import { formatPassageReference } from "~/app/_components/TextSelectors/bookData
 import { api } from "~/trpc/react";
 import { cn } from "~/lib/utils";
 import { useRouter } from "next/navigation";
+import { DeleteAccountDialog } from "./_components/DeleteAccountDialog";
 
 interface UserClientPageProps {
   name: string | undefined | null;
@@ -56,13 +57,6 @@ export default function UserClientPage({
     },
   });
 
-  const handleDelete = () => {
-    const confirmed = window.confirm("Are you sure?");
-    if (confirmed) {
-      deleteUser.mutate();
-    }
-  };
-
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
@@ -71,13 +65,10 @@ export default function UserClientPage({
             {name ? `Hi, ${name}!` : "Hi!"}
           </h1>
         </div>
-        <button
-          onClick={handleDelete}
-          disabled={deleteUser.isPending}
-          className="cursor-pointer rounded-md border border-red-600 bg-red-600 px-4 py-2 text-sm text-white hover:bg-red-700 hover:shadow-sm disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          Delete account
-        </button>
+        <DeleteAccountDialog
+          isPending={deleteUser.isPending}
+          onConfirm={() => deleteUser.mutate()}
+        />
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <StatCard
